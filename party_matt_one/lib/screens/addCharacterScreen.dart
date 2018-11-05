@@ -19,7 +19,6 @@ class CharacterScreen extends State<AddCharacterStatefulWidget> {
       removedItemBuilder: _buildRemovedItem,
     );
     _nextItem = 2;
-  
   }
 
   // Used to build list items that haven't been removed.
@@ -90,12 +89,13 @@ class CharacterScreen extends State<AddCharacterStatefulWidget> {
         ),
         body: new Center(
             child: new Column(children: <Widget>[
-              new Expanded(child:
-          new AnimatedList(
-            key: _listKey,
-            initialItemCount: _list.length,
-            itemBuilder: _buildItem,
-          ),),
+          new Expanded(
+            child: new AnimatedList(
+              key: _listKey,
+              initialItemCount: _list.length,
+              itemBuilder: _buildItem,
+            ),
+          ),
           new Expanded(
             child: new Align(
               alignment: FractionalOffset.bottomCenter,
@@ -177,21 +177,36 @@ class CardItem extends StatelessWidget {
         sizeFactor: animation,
         child: SizedBox(
           height: 128.0, //TODO replace this with calculateAllowedHeight();
-          child: Card(
-            color: Colors.primaries[item % Colors.primaries.length],
-            
-            child: ListTile(
-              
+            child: Dismissible(
+              // Each Dismissible must contain a Key. Keys allow Flutter to
+              // uniquely identify Widgets.
+              key: Key("index"),
+              // We also need to provide a function that tells our app
+              // what to do after an item has been swiped away.
+              onDismissed: (direction) {
+                // Remove the item from our data source.
+                onTap();
+
+                // Then show a snackbar!
+                Scaffold.of(context)
+                    .showSnackBar(SnackBar(content: Text("$item dismissed")));
+              },
+              // Show a red background as the item is swiped away
+              background: Container(color: Colors.red),
+            child: Card(
+              color: Colors.primaries[item % Colors.primaries.length],
+
+              child: ListTile(
                 leading: TextField(
                   controller: CharacterScreen.names[item],
                   decoration: InputDecoration(
                     border: InputBorder.none,
                   ),
                   //TODO add on submitted to check no other users of same name
+                  //TODO add characters remaining counter
                 ),
-
-                trailing:
-                    GestureDetector(child: Icon(Icons.close), onTap: onTap)),
+              ),
+            ),
           ),
         ),
       ),
