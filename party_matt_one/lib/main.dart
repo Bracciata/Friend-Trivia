@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/addCharacterScreen.dart';
+import 'screens/addCharacterScreenFromScratch.dart';
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 
       ),
       routes: <String, WidgetBuilder>{
-      '/screens/addCharacterScreen': (BuildContext context) => new AddCharacterStatefulWidget(),
+      '/screens/addCharacterScreenFromScratch': (BuildContext context) => new CharacterScreenStatefulWidget(),
       //'/page3': (BuildContext context) => new Page3()
     },
       home: new MyHomePage(title: 'Flutter Demo Home Page'),
@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
-      Navigator.pushNamed(context,'/screens/addCharacterScreen' );
+      Navigator.pushNamed(context,'/screens/addCharacterScreenFromScratch' );
     });
   }
 
