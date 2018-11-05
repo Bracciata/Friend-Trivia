@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 
 class CharacterScreen extends State<CharacterScreenStatefulWidget> {
   final List<TextEditingController> playerNames = new List();
+  String lastDeletedValue = "";
+  int dismissIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -11,7 +13,9 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
   }
 
   void _addNewPlayer() {
-    playerNames.add(new TextEditingController());
+    setState(() {
+      playerNames.add(new TextEditingController());
+    });
   }
 
   @override
@@ -37,34 +41,38 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
                       // what to do after an item has been swiped away.
                       onDismissed: (direction) {
                         // Remove the item from our data source.
+                        dismissIndex = index+1;
+                        lastDeletedValue = playerNames[index].text;
+                        playerNames[index].text = "";
+
                         setState(() {
                           playerNames.removeAt(index);
+
                         });
 
                         // Then show a snackbar!
                         Scaffold.of(context)
-                            //TODO create unremove element
-                            .showSnackBar(SnackBar(
-                                content: new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                              new Text(playerNames[index].text != ""
-                                  ? playerNames[index].text + " dismissed"
-                                  : "Player " +
-                                      index.toString() +
-                                      " dismissed"),
-                              new FlatButton(
-                                child: new Text("Undo"),
-                                onPressed: () {
-                                  playerNames.insert(index, playerNames[index]);
-                                },
-                              )
-                            ])));
+                              .showSnackBar(SnackBar(
+                                content: new Text(lastDeletedValue != ""
+                                    ? lastDeletedValue + " dismissed"
+                                    : "Player " +
+                                        (dismissIndex).toString() +
+                                        " dismissed"),
+                                action: new SnackBarAction(
+                                  label: "Undo",
+                                  onPressed: () {
+                                    setState(() {
+                                      playerNames.insert(
+                                          dismissIndex-1,
+                                          new TextEditingController(
+                                              text: lastDeletedValue));
+                                    });
+                                  },
+                                )));
                       },
                       // Show a red background as the item is swiped away
                       background: Container(color: Colors.red),
-                      child: ListTile(title: TextField()));
+                      child: ListTile(title: TextField(controller: playerNames[index],)));
                 }),
           ),
         ])),
