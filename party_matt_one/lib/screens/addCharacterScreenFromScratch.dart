@@ -32,6 +32,12 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
         appBar: new AppBar(
           title: new Text('Setup'),
           leading: new Container(),
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.arrow_forward),
+            onPressed: (){
+              //begin game
+            },)
+          ],
         ),
         body: new Center(
             child: new Column(children: <Widget>[
