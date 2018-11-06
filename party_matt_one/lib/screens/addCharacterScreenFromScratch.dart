@@ -6,7 +6,6 @@ class Countdown extends AnimatedWidget {
   Animation<int> animation;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Text(animation.value.toString(),
         style: new TextStyle(fontSize: 150.0));
   }
@@ -201,6 +200,9 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                 : Color.fromARGB(255, 221, 221, 221),
             child: new Icon(Icons.add)));
   }
+  //todo add a check if player name is allowed
+  //todo check if all players have names
+  //todo implement begin game when countdown ends
 }
 
 class CharacterScreenStatefulWidget extends StatefulWidget {
