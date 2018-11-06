@@ -16,10 +16,14 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
   }
 
   void _addNewPlayer() {
+    if(playerNames.length<9){
     setState(() {
       playerNames.add(new TextEditingController());
       textLength.add(0);
     });
+    }else{
+      //todo implement warn user that max players is nine
+    }
   }
 
   @override
@@ -70,6 +74,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
                                         new TextEditingController(
                                             text: lastDeletedValue));
                                   });
+                                  textLength.insert(dismissIndex-1, lastDeletedValue.length);
                                 },
                               )));
                         },
@@ -117,6 +122,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
         floatingActionButton: new FloatingActionButton(
             onPressed: _addNewPlayer,
             tooltip: 'Add Player',
+            backgroundColor: playerNames.length<9?null:Color.fromARGB(255, 221,221, 221),
             child: new Icon(Icons.add)));
   }
 }
