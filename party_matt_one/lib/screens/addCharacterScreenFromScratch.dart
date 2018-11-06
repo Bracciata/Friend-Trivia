@@ -75,7 +75,8 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
                         },
                         // Show a red background as the item is swiped away
                         background: Container(color: Colors.red),
-                        child: ListTile(
+                        child: new Container(decoration: new BoxDecoration(color: Colors.white), child:ListTile(
+                          
                             title: TextField(
                                 controller: playerNames[index],
                                 maxLength: 19,
@@ -84,13 +85,18 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
                                     textLength[index] = text.length;
                                   });
                                 },
+                                
                                 decoration: new InputDecoration(
                                     filled: true,
                                     fillColor: Colors.white,
                                     counterText:
-                                        (18 - textLength[index]).toString(),counterStyle: (18-textLength[index]<0)? new TextStyle(color: Colors.red):null))));
-                  } else {
-                    return ListTile(
+                                        (18 - textLength[index]).toString(),
+                                        //TODO decide between allowing the user to go as long as they want and just tell them they are wrong or using max length.
+                                    counterStyle: (18 - textLength[index] < 0)
+                                        ? new TextStyle(color: Colors.red)
+                                        : null)))));
+                    } else {
+                    return Container(decoration: new BoxDecoration(color: Color.fromARGB(255, 221,221, 221)), child: ListTile(
                         title: TextField(
                             controller: playerNames[index],
                             maxLength: 18,
@@ -101,9 +107,9 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
                             },
                             decoration: new InputDecoration(
                               filled: true,
-                              fillColor: Colors.grey,
+                              fillColor:Color.fromARGB(255, 221,221, 221),
                               counterText: (18 - textLength[index]).toString(),
-                            )));
+                            ))));
                   }
                 }),
           ),
