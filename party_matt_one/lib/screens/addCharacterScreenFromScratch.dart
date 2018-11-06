@@ -67,119 +67,131 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
           ],
         ),
         body: new Center(
-            child: new Stack(children: [
-          new Column(children: <Widget>[
-            new Expanded(
-              child: ListView.builder(
-                  itemCount: playerNames.length,
-                  itemBuilder: (context, index) {
-                    final item = index.toString();
-                    if (index > 1) {
-                      return Dismissible(
-                          // Each Dismissible must contain a Key. Keys allow Flutter to
-                          // uniquely identify Widgets.
-                          key: Key(item),
-                          // We also need to provide a function that tells our app
-                          // what to do after an item has been swiped away.
-                          onDismissed: (direction) {
-                            // Remove the item from our data source.
-                            dismissIndex = index + 1;
-                            lastDeletedValue = playerNames[index].text;
-                            playerNames[index].text = "";
+          child: new Stack(children: [
+            new Column(children: <Widget>[
+              new Expanded(
+                child: ListView.builder(
+                    itemCount: playerNames.length,
+                    itemBuilder: (context, index) {
+                      final item = index.toString();
+                      if (index > 1) {
+                        return Dismissible(
+                            // Each Dismissible must contain a Key. Keys allow Flutter to
+                            // uniquely identify Widgets.
+                            key: Key(item),
+                            // We also need to provide a function that tells our app
+                            // what to do after an item has been swiped away.
+                            onDismissed: (direction) {
+                              // Remove the item from our data source.
+                              dismissIndex = index + 1;
+                              lastDeletedValue = playerNames[index].text;
+                              playerNames[index].text = "";
 
-                            setState(() {
-                              playerNames.removeAt(index);
-                              textLength.removeAt(index);
-                            });
+                              setState(() {
+                                playerNames.removeAt(index);
+                                textLength.removeAt(index);
+                              });
 
-                            // Then show a snackbar!
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                                content: new Text(lastDeletedValue != ""
-                                    ? lastDeletedValue + " dismissed"
-                                    : "Player " +
-                                        (dismissIndex).toString() +
-                                        " dismissed"),
-                                action: new SnackBarAction(
-                                  label: "Undo",
-                                  onPressed: () {
-                                    setState(() {
-                                      playerNames.insert(
-                                          dismissIndex - 1,
-                                          new TextEditingController(
-                                              text: lastDeletedValue));
-                                    });
-                                    textLength.insert(dismissIndex - 1,
-                                        lastDeletedValue.length);
-                                  },
-                                )));
-                          },
-                          // Show a red background as the item is swiped away
-                          background: Container(color: Colors.red),
-                          child: new Container(
-                              decoration:
-                                  new BoxDecoration(color: Colors.white),
-                              child: ListTile(
-                                  title: TextField(
-                                      controller: playerNames[index],
-                                      maxLength: 19,
-                                      onChanged: (text) {
-                                        setState(() {
-                                          textLength[index] = text.length;
-                                        });
-                                      },
-                                      decoration: new InputDecoration(
-                                          filled: true,
-                                          fillColor: Colors.white,
-                                          counterText: (18 - textLength[index])
-                                              .toString(),
-                                          //TODO decide between allowing the user to go as long as they want and just tell them they are wrong or using max length.
-                                          counterStyle: (18 -
-                                                      textLength[index] <
-                                                  0)
-                                              ? new TextStyle(color: Colors.red)
-                                              : null)))));
-                    } else {
-                      return Container(
-                          decoration: new BoxDecoration(
-                              color: Color.fromARGB(255, 221, 221, 221)),
-                          child: ListTile(
-                              title: TextField(
-                                  controller: playerNames[index],
-                                  maxLength: 18,
-                                  onChanged: (text) {
-                                    setState(() {
-                                      textLength[index] = text.length;
-                                    });
-                                  },
-                                  decoration: new InputDecoration(
-                                    filled: true,
-                                    fillColor:
-                                        Color.fromARGB(255, 221, 221, 221),
-                                    counterText:
-                                        (18 - textLength[index]).toString(),
-                                  ))));
-                    }
-                  }),
-            ),
+                              // Then show a snackbar!
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: new Text(lastDeletedValue != ""
+                                      ? lastDeletedValue + " dismissed"
+                                      : "Player " +
+                                          (dismissIndex).toString() +
+                                          " dismissed"),
+                                  action: new SnackBarAction(
+                                    label: "Undo",
+                                    onPressed: () {
+                                      setState(() {
+                                        playerNames.insert(
+                                            dismissIndex - 1,
+                                            new TextEditingController(
+                                                text: lastDeletedValue));
+                                      });
+                                      textLength.insert(dismissIndex - 1,
+                                          lastDeletedValue.length);
+                                    },
+                                  )));
+                            },
+                            // Show a red background as the item is swiped away
+                            background: Container(color: Colors.red),
+                            child: new Container(
+                                decoration:
+                                    new BoxDecoration(color: Colors.white),
+                                child: ListTile(
+                                    title: TextField(
+                                        controller: playerNames[index],
+                                        maxLength: 19,
+                                        onChanged: (text) {
+                                          setState(() {
+                                            textLength[index] = text.length;
+                                          });
+                                        },
+                                        decoration: new InputDecoration(
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                            counterText: (18 -
+                                                    textLength[index])
+                                                .toString(),
+                                            //TODO decide between allowing the user to go as long as they want and just tell them they are wrong or using max length.
+                                            counterStyle:
+                                                (18 - textLength[index] < 0)
+                                                    ? new TextStyle(
+                                                        color: Colors.red)
+                                                    : null)))));
+                      } else {
+                        return Container(
+                            decoration: new BoxDecoration(
+                                color: Color.fromARGB(255, 221, 221, 221)),
+                            child: ListTile(
+                                title: TextField(
+                                    controller: playerNames[index],
+                                    maxLength: 18,
+                                    onChanged: (text) {
+                                      setState(() {
+                                        textLength[index] = text.length;
+                                      });
+                                    },
+                                    decoration: new InputDecoration(
+                                      filled: true,
+                                      fillColor:
+                                          Color.fromARGB(255, 221, 221, 221),
+                                      counterText:
+                                          (18 - textLength[index]).toString(),
+                                    ))));
+                      }
+                    }),
+              ),
+            ]),
+            visible
+                ? new Stack(
+                    fit: StackFit.expand,
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                        new Positioned.fill(
+                            child: new Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: new BoxDecoration(
+                                    color: Color.fromARGB(123, 0, 0, 0)))),
+                        new Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              new Countdown(
+                                animation:
+                                    new StepTween(begin: startValue, end: 0)
+                                        .animate(aniController),
+                              ),
+                              new FlatButton(
+                                child: new Text("Cancel"),
+                                onPressed: () {
+                                  //TODO implement cancel
+                                },
+                              )
+                            ]),
+                      ])
+                : new Container()
           ]),
-          visible?new Center(
-              child: new Stack( children:[new Positioned.fill(child:new Container(decoration: new BoxDecoration(color: Color.fromARGB(123, 0, 0, 0)))),
-             new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  new Countdown(
-                    animation: new StepTween(begin: startValue, end: 0)
-                        .animate(aniController),
-                  ),
-                  new FlatButton(
-                    child: new Text("Cancel"),
-                    onPressed: () {
-                      //TODO implement cancel
-                    },
-                  )
-                ]),
-            ])):new Container()]),
         ),
         floatingActionButton: new FloatingActionButton(
             onPressed: _addNewPlayer,
