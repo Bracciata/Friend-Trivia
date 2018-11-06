@@ -162,10 +162,9 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                   }),
             ),
           ]),
-          new Center(
-              child: new Opacity(
-            opacity: visible ? 0.75 : 0.0,
-            child: new Column(
+          visible?new Center(
+              child: new Stack( children:[new Positioned.fill(child:new Container(decoration: new BoxDecoration(color: Color.fromARGB(123, 0, 0, 0)))),
+             new Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -180,8 +179,8 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                     },
                   )
                 ]),
-          )),
-        ])),
+            ])):new Container()]),
+        ),
         floatingActionButton: new FloatingActionButton(
             onPressed: _addNewPlayer,
             tooltip: 'Add Player',
