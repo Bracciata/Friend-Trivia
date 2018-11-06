@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class CharacterScreen extends State<CharacterScreenStatefulWidget> {
   final List<TextEditingController> playerNames = new List();
+  final List<int> textLength = new List();
   String lastDeletedValue = "";
   int dismissIndex = 0;
   @override
@@ -10,11 +11,14 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
     super.initState();
     playerNames.add(new TextEditingController());
     playerNames.add(new TextEditingController());
+    textLength.add(0);
+    textLength.add(0);
   }
 
   void _addNewPlayer() {
     setState(() {
       playerNames.add(new TextEditingController());
+      textLength.add(0);
     });
   }
 
@@ -32,47 +36,75 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget> {
                 itemCount: playerNames.length,
                 itemBuilder: (context, index) {
                   final item = index.toString();
+                  if (index > 1) {
+                    return Dismissible(
+                        // Each Dismissible must contain a Key. Keys allow Flutter to
+                        // uniquely identify Widgets.
+                        key: Key(item),
+                        // We also need to provide a function that tells our app
+                        // what to do after an item has been swiped away.
+                        onDismissed: (direction) {
+                          // Remove the item from our data source.
+                          dismissIndex = index + 1;
+                          lastDeletedValue = playerNames[index].text;
+                          playerNames[index].text = "";
 
-                  return Dismissible(
-                      // Each Dismissible must contain a Key. Keys allow Flutter to
-                      // uniquely identify Widgets.
-                      key: Key(item),
-                      // We also need to provide a function that tells our app
-                      // what to do after an item has been swiped away.
-                      onDismissed: (direction) {
-                        // Remove the item from our data source.
-                        dismissIndex = index+1;
-                        lastDeletedValue = playerNames[index].text;
-                        playerNames[index].text = "";
+                          setState(() {
+                            playerNames.removeAt(index);
+                            textLength.removeAt(index);
+                          });
 
-                        setState(() {
-                          playerNames.removeAt(index);
-
-                        });
-
-                        // Then show a snackbar!
-                        Scaffold.of(context)
-                              .showSnackBar(SnackBar(
-                                content: new Text(lastDeletedValue != ""
-                                    ? lastDeletedValue + " dismissed"
-                                    : "Player " +
-                                        (dismissIndex).toString() +
-                                        " dismissed"),
-                                action: new SnackBarAction(
-                                  label: "Undo",
-                                  onPressed: () {
-                                    setState(() {
-                                      playerNames.insert(
-                                          dismissIndex-1,
-                                          new TextEditingController(
-                                              text: lastDeletedValue));
-                                    });
-                                  },
-                                )));
-                      },
-                      // Show a red background as the item is swiped away
-                      background: Container(color: Colors.red),
-                      child: ListTile(title: TextField(controller: playerNames[index],)));
+                          // Then show a snackbar!
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                              content: new Text(lastDeletedValue != ""
+                                  ? lastDeletedValue + " dismissed"
+                                  : "Player " +
+                                      (dismissIndex).toString() +
+                                      " dismissed"),
+                              action: new SnackBarAction(
+                                label: "Undo",
+                                onPressed: () {
+                                  setState(() {
+                                    playerNames.insert(
+                                        dismissIndex - 1,
+                                        new TextEditingController(
+                                            text: lastDeletedValue));
+                                  });
+                                },
+                              )));
+                        },
+                        // Show a red background as the item is swiped away
+                        background: Container(color: Colors.red),
+                        child: ListTile(
+                            title: TextField(
+                                controller: playerNames[index],
+                                maxLength: 19,
+                                onChanged: (text) {
+                                  setState(() {
+                                    textLength[index] = text.length;
+                                  });
+                                },
+                                decoration: new InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    counterText:
+                                        (18 - textLength[index]).toString(),counterStyle: (18-textLength[index]<0)? new TextStyle(color: Colors.red):null))));
+                  } else {
+                    return ListTile(
+                        title: TextField(
+                            controller: playerNames[index],
+                            maxLength: 18,
+                            onChanged: (text) {
+                              setState(() {
+                                textLength[index] = text.length;
+                              });
+                            },
+                            decoration: new InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey,
+                              counterText: (18 - textLength[index]).toString(),
+                            )));
+                  }
                 }),
           ),
         ])),
