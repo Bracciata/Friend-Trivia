@@ -49,6 +49,14 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     });
   }
 
+  void beginGame() {}
+  void cancelCountdown() {
+    setState(() {
+      aniController.stop();
+      visible = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -59,7 +67,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
             IconButton(
               icon: Icon(Icons.arrow_forward),
               onPressed: () {
-                //begin game
+                //begin countdown to start game
                 startCountdown();
               },
             )
@@ -179,12 +187,18 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                               new Countdown(
                                 animation:
                                     new StepTween(begin: startValue, end: 0)
-                                        .animate(aniController),
+                                        .animate(aniController)
+                                          ..addStatusListener((state) {
+                                            if (state ==
+                                                AnimationStatus.completed) {
+                                              beginGame();
+                                            }
+                                          }),
                               ),
                               new FlatButton(
                                 child: new Text("Cancel"),
                                 onPressed: () {
-                                  //TODO implement cancel
+                                  cancelCountdown();
                                 },
                               )
                             ]),
@@ -203,6 +217,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   //todo add a check if player name is allowed
   //todo check if all players have names
   //todo implement begin game when countdown ends
+  //todo make floating actionbutton look overlapped and unclickable during countdown
 }
 
 class CharacterScreenStatefulWidget extends StatefulWidget {
