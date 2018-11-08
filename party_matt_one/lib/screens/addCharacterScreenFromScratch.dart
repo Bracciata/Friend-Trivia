@@ -42,7 +42,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
 
   void _focusChanged(int index) {
     if (focusNodes[index].hasFocus == false) {
-      _checkIfThisNameAllowed(index);
+      _checkIfThisNameAllowed(index, true);
     }
   }
 
@@ -107,7 +107,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     }
   }
 
-  void _checkIfThisNameAllowed(int index) {
+  void _checkIfThisNameAllowed(int index, bool colorCheck) {
     setState(() {
       playerNameAllowed[index] = 2;
       if (playerNames[index].text.length > 0) {
@@ -118,9 +118,11 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
         }
       }
       _checkIfAllPlayersAllowed();
+      if (colorCheck) {}
     });
   }
 
+  void updateColor(int index) {}
   @override
   Widget build(BuildContext context) {
     focusNodes = new List();
@@ -210,10 +212,11 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                         setState(() {
                                           textLength[index] = text.length;
                                         });
+                                        _checkIfThisNameAllowed(index, false);
                                       },
                                       focusNode: focusNodes[index],
                                       onEditingComplete: () {
-                                        _checkIfThisNameAllowed(index);
+                                        _checkIfThisNameAllowed(index, true);
                                       },
                                       decoration: new InputDecoration(
                                           filled: true,
@@ -238,10 +241,11 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                     setState(() {
                                       textLength[index] = text.length;
                                     });
+                                    _checkIfThisNameAllowed(index, false);
                                   },
                                   focusNode: focusNodes[index],
                                   onEditingComplete: () {
-                                    _checkIfThisNameAllowed(index);
+                                    _checkIfThisNameAllowed(index, true);
                                   },
                                   decoration: new InputDecoration(
                                     filled: true,
@@ -311,8 +315,8 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
 ////Otherwise notify can't be blank
 ////Also make sure no others share name
 //TODO still can't remove any element other than last in list, that is bad.
-//TODO add ontextchanged check that doesn't warn of it being invalid but will allow you to begin game
 //TODO if they press non ready begin button show them what is wrong
+//TODO implement color change when checke with true for check color.
 }
 
 class CharacterScreenStatefulWidget extends StatefulWidget {
