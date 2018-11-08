@@ -43,7 +43,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     }
   }
 
-  void startCountdown() {
+  void _startCountdown() {
     setState(() {
       visible = true;
       aniController.forward(from: 0.0);
@@ -80,10 +80,8 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
           actions: <Widget>[
             FlatButton(
               child: new Text("Begin Game",style: new TextStyle(color: Colors.white),),
-              onPressed: () {
+              onPressed: !visible ? _startCountdown: null,
                 //begin countdown to start game
-                startCountdown();
-              },
             )
           ],
         ),
@@ -241,7 +239,6 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   //todo add a check if player name is allowed
   //todo check if all players have names
   //todo implement begin game when countdown ends
-  //todo make it so you can't press begin multiple times
   void _checkIfAllPlayersAllowed(){
 
   }
