@@ -4,7 +4,7 @@ import 'gameScreen.dart';
 
 class Countdown extends AnimatedWidget {
   Countdown({Key key, this.animation}) : super(key: key, listenable: animation);
-  Animation<int> animation;
+  final Animation<int> animation;
   @override
   Widget build(BuildContext context) {
     return new Text(animation.value.toString(),

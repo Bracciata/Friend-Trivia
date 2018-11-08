@@ -24,7 +24,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
 
 class GameScreenStatefulWidget extends StatefulWidget {
   GameScreenStatefulWidget({this.names});
-  List names;
+  final List names;
   @override
   GameScreen createState() => new GameScreen(names: names);
 }
