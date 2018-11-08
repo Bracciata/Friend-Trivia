@@ -220,18 +220,28 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                 : new Container()
           ]),
         ),
-        floatingActionButton: new FloatingActionButton(
+        floatingActionButton: new Stack( children:[FloatingActionButton(
             onPressed: !visible?_addNewPlayer:null,
             tooltip: 'Add Player',
             backgroundColor: playerNames.length < 9
                 ? null
                 : Color.fromARGB(255, 221, 221, 221),
-            child: new Icon(Icons.add)));
-  }
+            child: new Icon(Icons.add)),
+              visible ? new Positioned.fill(
+                            child: new Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: new BoxDecoration(
+                                    color: Color.fromARGB(123, 0, 0, 0),shape: BoxShape.circle))):new Positioned.fill(
+                            child: new Container(
+                                width: MediaQuery.of(context).size.width,
+                                decoration: new BoxDecoration(
+                                    color: Color.fromARGB(0, 0, 0, 0),shape: BoxShape.circle))),
+            ]));
+            }
   //todo add a check if player name is allowed
   //todo check if all players have names
   //todo implement begin game when countdown ends
-  //todo make floating actionbutton look overlapped
+  //todo make it so you can't press begin multiple times
   void _checkIfAllPlayersAllowed(){
 
   }
