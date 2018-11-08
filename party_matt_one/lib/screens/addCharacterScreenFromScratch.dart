@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'gameScreen.dart';
 
 class Countdown extends AnimatedWidget {
   Countdown({Key key, this.animation}) : super(key: key, listenable: animation);
@@ -49,7 +50,18 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     });
   }
 
-  void beginGame() {}
+  void beginGame() {
+    List<String> names = new List();
+    for (final name in playerNames) {
+      names.add(name.text);
+    }
+    Navigator.push(
+        context,
+        new MaterialPageRoute(
+            builder: (BuildContext context) =>
+                new GameScreenStatefulWidget(names: names)));
+  }
+
   void cancelCountdown() {
     setState(() {
       aniController.stop();

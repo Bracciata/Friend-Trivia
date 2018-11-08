@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/addCharacterScreenFromScratch.dart';
+
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,12 +19,11 @@ class MyApp extends StatelessWidget {
         // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
-
       ),
       routes: <String, WidgetBuilder>{
-      '/screens/addCharacterScreenFromScratch': (BuildContext context) => new CharacterScreenStatefulWidget(),
-      //'/page3': (BuildContext context) => new Page3()
-    },
+        '/screens/addCharacterScreenFromScratch': (BuildContext context) =>
+            new CharacterScreenStatefulWidget(),
+      },
       home: new MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
-      Navigator.pushNamed(context,'/screens/addCharacterScreenFromScratch' );
+      Navigator.pushNamed(context, '/screens/addCharacterScreenFromScratch');
     });
   }
 
