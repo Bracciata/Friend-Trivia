@@ -74,7 +74,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Setup'),
-          leading: new Container(),
+          leading: new IconButton(icon:new Icon(Icons.arrow_back),onPressed: ()=>Navigator.pop(context),),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.arrow_forward),
@@ -230,7 +230,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   //todo check if all players have names
   //todo implement begin game when countdown ends
   //todo make floating actionbutton look overlapped and unclickable during countdown
+  //TODO make it so you can't press back from game page
+  //todo fix silliness of look of back arrow and forward arrow
 }
+
 
 class CharacterScreenStatefulWidget extends StatefulWidget {
   @override
