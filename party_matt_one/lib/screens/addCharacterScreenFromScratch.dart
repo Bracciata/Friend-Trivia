@@ -221,7 +221,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
           ]),
         ),
         floatingActionButton: new FloatingActionButton(
-            onPressed: _addNewPlayer,
+            onPressed: !visible?_addNewPlayer:null,
             tooltip: 'Add Player',
             backgroundColor: playerNames.length < 9
                 ? null
@@ -231,8 +231,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   //todo add a check if player name is allowed
   //todo check if all players have names
   //todo implement begin game when countdown ends
-  //todo make floating actionbutton look overlapped and unclickable during countdown
-  //TODO make it so you can't press back from game page
+  //todo make floating actionbutton look overlapped
+  void _checkIfAllPlayersAllowed(){
+
+  }
 }
 
 
