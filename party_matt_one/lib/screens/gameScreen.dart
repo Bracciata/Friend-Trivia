@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//TODO is begin game using players names
 class GameScreen extends State<GameScreenStatefulWidget> {
   List names;
   GameScreen({this.names});

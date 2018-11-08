@@ -14,13 +14,16 @@ class Countdown extends AnimatedWidget {
 
 class CharacterScreen extends State<CharacterScreenStatefulWidget>
     with TickerProviderStateMixin {
+  final List<int> playerNameAllowed = new List();
   final List<TextEditingController> playerNames = new List();
   final List<int> textLength = new List();
   String lastDeletedValue = "";
+  int lastDeletedAllowed = -1;
   int dismissIndex = 0;
   bool visible = false;
   AnimationController aniController;
   static const int startValue = 4;
+  bool allPlayersAllowed = false;
   @override
   void initState() {
     super.initState();
@@ -28,6 +31,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     playerNames.add(new TextEditingController());
     textLength.add(0);
     textLength.add(0);
+    //0 means untouched, 1 allowed, 2 not allowed
+    playerNameAllowed.add(0);
+    playerNameAllowed.add(0);
+
     aniController = new AnimationController(
         vsync: this, duration: new Duration(seconds: startValue));
   }
@@ -37,10 +44,19 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
       setState(() {
         playerNames.add(new TextEditingController());
         textLength.add(0);
+        playerNameAllowed.add(0);
       });
     } else {
       //todo implement warn user that max players is nine
     }
+  }
+
+  List<String> namesAsStringList(List<TextEditingController> list) {
+    List<String> listNames = new List();
+    for (var names in list) {
+      listNames.add(names.text);
+    }
+    return listNames;
   }
 
   void _startCountdown() {
@@ -59,9 +75,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
         context,
         new MaterialPageRoute(
             builder: (BuildContext context) =>
-                new GameScreenStatefulWidget(names: names)),(Route<dynamic>  route){
-                  return false;
-                });
+                new GameScreenStatefulWidget(names: names)),
+        (Route<dynamic> route) {
+      return false;
+    });
   }
 
   void cancelCountdown() {
@@ -71,17 +88,50 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     });
   }
 
+  void _checkIfAllPlayersAllowed() {
+    if (playerNameAllowed.contains(0) || playerNameAllowed.contains(2)) {
+      setState(() {
+        allPlayersAllowed = false;
+      });
+    } else {
+      setState(() {
+        allPlayersAllowed = true;
+      });
+    }
+  }
+
+  void _checkIfThisNameAllowed(int index) {
+    playerNameAllowed[index] = 2;
+    if (playerNames[index].text.length > 0) {
+      if (!namesAsStringList(playerNames.skip(index))
+          .contains(playerNames[index].text)) {
+        playerNameAllowed[index] = 1;
+      }
+    }
+    _checkIfAllPlayersAllowed();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Setup'),
-          leading: new IconButton(icon:new Icon(Icons.arrow_back),onPressed: ()=>Navigator.pop(context),),
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Begin Game",style: new TextStyle(color: Colors.white),),
-              onPressed: !visible ? _startCountdown: null,
-                //begin countdown to start game
+              child: new Text(
+                "Begin Game",
+                style: allPlayersAllowed
+                    ? new TextStyle(color: Colors.white)
+                    : new TextStyle(color: Colors.grey),
+              ),
+              onPressed: !visible
+                  ? (allPlayersAllowed ? _startCountdown : null)
+                  : null,
+              //begin countdown to start game
             )
           ],
         ),
@@ -105,10 +155,11 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                               dismissIndex = index + 1;
                               lastDeletedValue = playerNames[index].text;
                               playerNames[index].text = "";
-
+                              lastDeletedAllowed = playerNameAllowed[index];
                               setState(() {
                                 playerNames.removeAt(index);
                                 textLength.removeAt(index);
+                                playerNameAllowed.removeAt(index);
                               });
 
                               // Then show a snackbar!
@@ -129,6 +180,8 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                       });
                                       textLength.insert(dismissIndex - 1,
                                           lastDeletedValue.length);
+                                      playerNameAllowed.insert(
+                                          dismissIndex - 1, lastDeletedAllowed);
                                     },
                                   )));
                             },
@@ -218,32 +271,33 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                 : new Container()
           ]),
         ),
-        floatingActionButton: new Stack( children:[FloatingActionButton(
-            onPressed: !visible?_addNewPlayer:null,
-            tooltip: 'Add Player',
-            backgroundColor: playerNames.length < 9
-                ? null
-                : Color.fromARGB(255, 221, 221, 221),
-            child: new Icon(Icons.add)),
-              visible ? new Positioned.fill(
-                            child: new Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: new BoxDecoration(
-                                    color: Color.fromARGB(123, 0, 0, 0),shape: BoxShape.circle))):new Positioned.fill(
-                            child: new Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: new BoxDecoration(
-                                    color: Color.fromARGB(0, 0, 0, 0),shape: BoxShape.circle))),
-            ]));
-            }
-  //todo add a check if player name is allowed
-  //todo check if all players have names
-  //todo implement begin game when countdown ends
-  void _checkIfAllPlayersAllowed(){
-
+        floatingActionButton: new Stack(children: [
+          FloatingActionButton(
+              onPressed: !visible ? _addNewPlayer : null,
+              tooltip: 'Add Player',
+              backgroundColor: playerNames.length < 9
+                  ? null
+                  : Color.fromARGB(255, 221, 221, 221),
+              child: new Icon(Icons.add)),
+          visible
+              ? new Positioned.fill(
+                  child: new Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: new BoxDecoration(
+                          color: Color.fromARGB(123, 0, 0, 0),
+                          shape: BoxShape.circle)))
+              : new Positioned.fill(
+                  child: new Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: new BoxDecoration(
+                          color: Color.fromARGB(0, 0, 0, 0),
+                          shape: BoxShape.circle))),
+        ]));
   }
+//todo show what names not allowed
+//todo share why names is not allowed
+//todo add check on submitted
 }
-
 
 class CharacterScreenStatefulWidget extends StatefulWidget {
   @override
