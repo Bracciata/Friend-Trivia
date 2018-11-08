@@ -55,11 +55,13 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     for (final name in playerNames) {
       names.add(name.text);
     }
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
         context,
         new MaterialPageRoute(
             builder: (BuildContext context) =>
-                new GameScreenStatefulWidget(names: names)));
+                new GameScreenStatefulWidget(names: names)),(Route<dynamic>  route){
+                  return false;
+                });
   }
 
   void cancelCountdown() {
@@ -231,7 +233,6 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   //todo implement begin game when countdown ends
   //todo make floating actionbutton look overlapped and unclickable during countdown
   //TODO make it so you can't press back from game page
-  //todo fix silliness of look of back arrow and forward arrow
 }
 
 
