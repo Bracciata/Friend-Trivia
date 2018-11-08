@@ -17,6 +17,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   final List<int> playerNameAllowed = new List();
   final List<TextEditingController> playerNames = new List();
   final List<int> textLength = new List();
+  List<FocusNode> focusNodes = new List();
   String lastDeletedValue = "";
   int lastDeletedAllowed = -1;
   int dismissIndex = 0;
@@ -37,6 +38,12 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
 
     aniController = new AnimationController(
         vsync: this, duration: new Duration(seconds: startValue));
+  }
+
+  void _focusChanged(int index) {
+    if (focusNodes[index].hasFocus == false) {
+      _checkIfThisNameAllowed(index);
+    }
   }
 
   void _addNewPlayer() {
@@ -116,6 +123,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
 
   @override
   Widget build(BuildContext context) {
+    focusNodes = new List();
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Setup'),
@@ -145,6 +153,8 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                   itemCount: playerNames.length,
                   itemBuilder: (context, index) {
                     final item = index.toString();
+                    focusNodes.add(new FocusNode());
+                    focusNodes[index].addListener(() => _focusChanged(index));
                     if (index > 1) {
                       return Dismissible(
                           // Each Dismissible must contain a Key. Keys allow Flutter to
@@ -201,6 +211,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                           textLength[index] = text.length;
                                         });
                                       },
+                                      focusNode: focusNodes[index],
                                       onEditingComplete: () {
                                         _checkIfThisNameAllowed(index);
                                       },
@@ -228,6 +239,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                       textLength[index] = text.length;
                                     });
                                   },
+                                  focusNode: focusNodes[index],
                                   onEditingComplete: () {
                                     _checkIfThisNameAllowed(index);
                                   },
@@ -297,9 +309,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
 //todo share why names is not allowed
 ////If allow over max length then explain it is over max length
 ////Otherwise notify can't be blank
-  ///Also make sure no others share name
-//todo make it check whenever focus is lost for text fields
+////Also make sure no others share name
 //TODO still can't remove any element other than last in list, that is bad.
+//TODO add ontextchanged check that doesn't warn of it being invalid but will allow you to begin game
+//TODO if they press non ready begin button show them what is wrong
 }
 
 class CharacterScreenStatefulWidget extends StatefulWidget {
