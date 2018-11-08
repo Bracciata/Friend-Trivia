@@ -76,8 +76,8 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
           title: new Text('Setup'),
           leading: new IconButton(icon:new Icon(Icons.arrow_back),onPressed: ()=>Navigator.pop(context),),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
+            FlatButton(
+              child: new Text("Begin Game",style: new TextStyle(color: Colors.white),),
               onPressed: () {
                 //begin countdown to start game
                 startCountdown();
