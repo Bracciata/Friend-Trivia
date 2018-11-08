@@ -101,202 +101,205 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   }
 
   void _checkIfThisNameAllowed(int index) {
-    playerNameAllowed[index] = 2;
-    if (playerNames[index].text.length > 0) {
-      if (!namesAsStringList(playerNames.skip(index))
-          .contains(playerNames[index].text)) {
-        playerNameAllowed[index] = 1;
+    setState(() {
+      playerNameAllowed[index] = 2;
+      if (playerNames[index].text.length > 0) {
+        List<String> l = namesAsStringList(playerNames);
+        l.removeAt(index);
+        if (!l.contains(playerNames[index].text)) {
+          playerNameAllowed[index] = 1;
+        }
       }
-    }
-    _checkIfAllPlayersAllowed();
+      _checkIfAllPlayersAllowed();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Setup'),
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: new Text(
-                "Begin Game",
-                style: allPlayersAllowed
-                    ? new TextStyle(color: Colors.white)
-                    : new TextStyle(color: Colors.grey),
-              ),
-              onPressed: !visible
-                  ? (allPlayersAllowed ? _startCountdown : null)
-                  : null,
-              //begin countdown to start game
-            )
-          ],
+      appBar: new AppBar(
+        title: new Text('Setup'),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
-        body: new Center(
-          child: new Stack(children: [
-            new Column(children: <Widget>[
-              new Expanded(
-                child: ListView.builder(
-                    itemCount: playerNames.length,
-                    itemBuilder: (context, index) {
-                      final item = index.toString();
-                      if (index > 1) {
-                        return Dismissible(
-                            // Each Dismissible must contain a Key. Keys allow Flutter to
-                            // uniquely identify Widgets.
-                            key: Key(item),
-                            // We also need to provide a function that tells our app
-                            // what to do after an item has been swiped away.
-                            onDismissed: (direction) {
-                              // Remove the item from our data source.
-                              dismissIndex = index + 1;
-                              lastDeletedValue = playerNames[index].text;
-                              playerNames[index].text = "";
-                              lastDeletedAllowed = playerNameAllowed[index];
-                              setState(() {
-                                playerNames.removeAt(index);
-                                textLength.removeAt(index);
-                                playerNameAllowed.removeAt(index);
-                              });
+        actions: <Widget>[
+          FlatButton(
+            child: new Text(
+              "Begin Game",
+              style: allPlayersAllowed
+                  ? new TextStyle(color: Colors.white)
+                  : new TextStyle(color: Colors.grey),
+            ),
+            onPressed:
+                !visible ? (allPlayersAllowed ? _startCountdown : null) : null,
+            //begin countdown to start game
+          )
+        ],
+      ),
+      body: new Center(
+        child: new Stack(children: [
+          new Column(children: <Widget>[
+            new Expanded(
+              child: ListView.builder(
+                  itemCount: playerNames.length,
+                  itemBuilder: (context, index) {
+                    final item = index.toString();
+                    if (index > 1) {
+                      return Dismissible(
+                          // Each Dismissible must contain a Key. Keys allow Flutter to
+                          // uniquely identify Widgets.
+                          key: Key(item),
+                          // We also need to provide a function that tells our app
+                          // what to do after an item has been swiped away.
+                          onDismissed: (direction) {
+                            // Remove the item from our data source.
+                            dismissIndex = index + 1;
+                            lastDeletedValue = playerNames[index].text;
+                            playerNames[index].text = "";
+                            lastDeletedAllowed = playerNameAllowed[index];
+                            setState(() {
+                              playerNames.removeAt(index);
+                              textLength.removeAt(index);
+                              playerNameAllowed.removeAt(index);
+                            });
 
-                              // Then show a snackbar!
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: new Text(lastDeletedValue != ""
-                                      ? lastDeletedValue + " dismissed"
-                                      : "Player " +
-                                          (dismissIndex).toString() +
-                                          " dismissed"),
-                                  action: new SnackBarAction(
-                                    label: "Undo",
-                                    onPressed: () {
-                                      setState(() {
-                                        playerNames.insert(
-                                            dismissIndex - 1,
-                                            new TextEditingController(
-                                                text: lastDeletedValue));
-                                      });
-                                      textLength.insert(dismissIndex - 1,
-                                          lastDeletedValue.length);
-                                      playerNameAllowed.insert(
-                                          dismissIndex - 1, lastDeletedAllowed);
-                                    },
-                                  )));
-                            },
-                            // Show a red background as the item is swiped away
-                            background: Container(color: Colors.red),
-                            child: new Container(
-                                decoration:
-                                    new BoxDecoration(color: Colors.white),
-                                child: ListTile(
-                                    title: TextField(
-                                        controller: playerNames[index],
-                                        maxLength: 19,
-                                        onChanged: (text) {
-                                          setState(() {
-                                            textLength[index] = text.length;
-                                          });
-                                        },
-                                        decoration: new InputDecoration(
-                                            filled: true,
-                                            fillColor: Colors.white,
-                                            counterText: (18 -
-                                                    textLength[index])
-                                                .toString(),
-                                            //TODO decide between allowing the user to go as long as they want and just tell them they are wrong or using max length.
-                                            counterStyle:
-                                                (18 - textLength[index] < 0)
-                                                    ? new TextStyle(
-                                                        color: Colors.red)
-                                                    : null)))));
-                      } else {
-                        return Container(
-                            decoration: new BoxDecoration(
-                                color: Color.fromARGB(255, 221, 221, 221)),
-                            child: ListTile(
-                                title: TextField(
-                                    controller: playerNames[index],
-                                    maxLength: 18,
-                                    onChanged: (text) {
-                                      setState(() {
-                                        textLength[index] = text.length;
-                                      });
-                                    },
-                                    decoration: new InputDecoration(
-                                      filled: true,
-                                      fillColor:
-                                          Color.fromARGB(255, 221, 221, 221),
-                                      counterText:
-                                          (18 - textLength[index]).toString(),
-                                    ))));
-                      }
-                    }),
-              ),
-            ]),
-            visible
-                ? new Stack(
-                    fit: StackFit.expand,
-                    alignment: AlignmentDirectional.center,
-                    children: [
-                        new Positioned.fill(
-                            child: new Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: new BoxDecoration(
-                                    color: Color.fromARGB(123, 0, 0, 0)))),
-                        new Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              new Countdown(
-                                animation:
-                                    new StepTween(begin: startValue, end: 0)
-                                        .animate(aniController)
-                                          ..addStatusListener((state) {
-                                            if (state ==
-                                                AnimationStatus.completed) {
-                                              beginGame();
-                                            }
-                                          }),
-                              ),
-                              new FlatButton(
-                                child: new Text("Cancel"),
-                                onPressed: () {
-                                  cancelCountdown();
-                                },
-                              )
-                            ]),
-                      ])
-                : new Container()
+                            // Then show a snackbar!
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content: new Text(lastDeletedValue != ""
+                                    ? lastDeletedValue + " dismissed"
+                                    : "Player " +
+                                        (dismissIndex).toString() +
+                                        " dismissed"),
+                                action: new SnackBarAction(
+                                  label: "Undo",
+                                  onPressed: () {
+                                    setState(() {
+                                      playerNames.insert(
+                                          dismissIndex - 1,
+                                          new TextEditingController(
+                                              text: lastDeletedValue));
+                                    });
+                                    textLength.insert(dismissIndex - 1,
+                                        lastDeletedValue.length);
+                                    playerNameAllowed.insert(
+                                        dismissIndex - 1, lastDeletedAllowed);
+                                  },
+                                )));
+                          },
+                          // Show a red background as the item is swiped away
+                          background: Container(color: Colors.red),
+                          child: new Container(
+                              decoration:
+                                  new BoxDecoration(color: Colors.white),
+                              child: ListTile(
+                                  title: TextField(
+                                      controller: playerNames[index],
+                                      maxLength: 19,
+                                      onChanged: (text) {
+                                        setState(() {
+                                          textLength[index] = text.length;
+                                        });
+                                      },
+                                      onEditingComplete: () {
+                                        _checkIfThisNameAllowed(index);
+                                      },
+                                      decoration: new InputDecoration(
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          counterText: (18 - textLength[index])
+                                              .toString(),
+                                          //TODO decide between allowing the user to go as long as they want and just tell them they are wrong or using max length.
+                                          counterStyle: (18 -
+                                                      textLength[index] <
+                                                  0)
+                                              ? new TextStyle(color: Colors.red)
+                                              : null)))));
+                    } else {
+                      return Container(
+                          decoration: new BoxDecoration(
+                              color: Color.fromARGB(255, 221, 221, 221)),
+                          child: ListTile(
+                              title: TextField(
+                                  controller: playerNames[index],
+                                  maxLength: 18,
+                                  onChanged: (text) {
+                                    setState(() {
+                                      textLength[index] = text.length;
+                                    });
+                                  },
+                                  onEditingComplete: () {
+                                    _checkIfThisNameAllowed(index);
+                                  },
+                                  decoration: new InputDecoration(
+                                    filled: true,
+                                    fillColor:
+                                        Color.fromARGB(255, 221, 221, 221),
+                                    counterText:
+                                        (18 - textLength[index]).toString(),
+                                  ))));
+                    }
+                  }),
+            ),
           ]),
-        ),
-        floatingActionButton: new Stack(children: [
-          FloatingActionButton(
-              onPressed: !visible ? _addNewPlayer : null,
-              tooltip: 'Add Player',
-              backgroundColor: playerNames.length < 9
-                  ? null
-                  : Color.fromARGB(255, 221, 221, 221),
-              child: new Icon(Icons.add)),
           visible
-              ? new Positioned.fill(
-                  child: new Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: new BoxDecoration(
-                          color: Color.fromARGB(123, 0, 0, 0),
-                          shape: BoxShape.circle)))
-              : new Positioned.fill(
-                  child: new Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: new BoxDecoration(
-                          color: Color.fromARGB(0, 0, 0, 0),
-                          shape: BoxShape.circle))),
-        ]));
+              ? new Stack(
+                  fit: StackFit.expand,
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                      new Positioned.fill(
+                          child: new Container(
+                              width: MediaQuery.of(context).size.width,
+                              decoration: new BoxDecoration(
+                                  color: Color.fromARGB(123, 0, 0, 0)))),
+                      new Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            new Countdown(
+                              animation: new StepTween(
+                                      begin: startValue, end: 0)
+                                  .animate(aniController)
+                                    ..addStatusListener((state) {
+                                      if (state == AnimationStatus.completed) {
+                                        beginGame();
+                                      }
+                                    }),
+                            ),
+                            new FlatButton(
+                              child: new Text("Cancel"),
+                              onPressed: () {
+                                cancelCountdown();
+                              },
+                            )
+                          ]),
+                    ])
+              : new Container()
+        ]),
+      ),
+      floatingActionButton: new FloatingActionButton(
+          onPressed: !visible ? _addNewPlayer : null,
+          tooltip: 'Add Player',
+          backgroundColor: playerNames.length < 9
+              ? (visible
+                  ? Color.alphaBlend(
+                      Color.fromARGB(123, 0, 0, 0), ThemeData().accentColor)
+                  : null)
+              : visible
+                  ? Color.alphaBlend(Color.fromARGB(123, 0, 0, 0),
+                      Color.fromARGB(255, 221, 221, 221))
+                  : Color.fromARGB(255, 221, 221, 221),
+          child: new Icon(Icons.add)),
+    );
   }
-//todo show what names not allowed
+//todo show which names are not allowed
+////maybe make color red
 //todo share why names is not allowed
-//todo add check on submitted
+////If allow over max length then explain it is over max length
+////Otherwise notify can't be blank
+  ///Also make sure no others share name
+//todo make it check whenever focus is lost for text fields
+//TODO still can't remove any element other than last in list, that is bad.
 }
 
 class CharacterScreenStatefulWidget extends StatefulWidget {
