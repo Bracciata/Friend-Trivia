@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:party_matt_one/strings/questions.dart';
 //TODO is begin game using players names
+//TODO create the questions
 class GameScreen extends State<GameScreenStatefulWidget> {
   List names;
   GameScreen({this.names});
+  List questions = questions
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
