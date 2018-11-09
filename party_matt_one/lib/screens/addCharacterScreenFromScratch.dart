@@ -59,6 +59,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
         playerNames.add(new TextEditingController());
         textLength.add(0);
         playerNameAllowed.add(0);
+        _checkIfThisNameAllowed(playerNames.length-1, false);
       });
     } else {
       //todo implement warn user that max players is nine
