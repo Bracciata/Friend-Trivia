@@ -80,28 +80,48 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                 :
                 //the page for showing pass to other player and wait until done
                 screenShowing == 0
-                    ? new Column(
-                        children: [
-                          new Text("Pass to"),
-                          new Text(names[playersAnswered]),
-                          new FlatButton(
-                            child: new Text("Done"),
-                            onPressed: () {
-                              passed();
-                            },
-                          )
-                        ],
+                    ? GestureDetector(
+                        child: new Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              new Text(
+                                "Pass to",
+                                textAlign: TextAlign.center,
+                              ),
+                              new Text(names[playersAnswered],
+                                  textAlign: TextAlign.center),
+                              new FlatButton(
+                                child: new Text("Done"),
+                                onPressed: () {
+                                  passed();
+                                },
+                              )
+                            ],
+                          ),
+                          color: Colors.white,
+                        ),
+                        onTap: passed,
                       )
                     :
                     //the page for showing who won the question
-                    FlatButton(
-                        child: new Text("Done with question..."),
-                        onPressed: () {
-                          beginNextQuestion();
-                        },
-                      )
-            //shows the graph
-            ));
+                    GestureDetector(
+                        child: new Container(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                FlatButton(
+                                  child: new Text("Done with question..."),
+                                  onPressed: () {
+                                    beginNextQuestion();
+                                  },
+                                )
+                              ]),
+                          color: Colors.white,
+                        ),
+                        onTap: beginNextQuestion)));
   }
 
   void nameChosen(int index) {
@@ -119,7 +139,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
 
   void beginNextQuestion() {
     //TODO implement out of questions or done with game
-    playersAnswered=0;
+    playersAnswered = 0;
     questionIndex += 1;
     for (var pointsByRound in playerPointsThisRound) {
       pointsByRound = 0;
