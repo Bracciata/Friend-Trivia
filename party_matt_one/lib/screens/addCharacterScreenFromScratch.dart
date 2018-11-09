@@ -11,7 +11,13 @@ class Countdown extends AnimatedWidget {
         style: new TextStyle(fontSize: 150.0));
   }
 }
+class NameTextField extends Container{
+@override
+Widget build(BuildContext context){
+  return new Container();
+}
 
+}
 class CharacterScreen extends State<CharacterScreenStatefulWidget>
     with TickerProviderStateMixin {
   final List<int> playerNameAllowed = new List();
@@ -25,6 +31,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   AnimationController aniController;
   static const int startValue = 4;
   bool allPlayersAllowed = false;
+
   @override
   void initState() {
     super.initState();
@@ -317,6 +324,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
 //TODO still can't remove any element other than last in list, that is bad.
 //TODO if they press non ready begin button show them what is wrong
 //TODO implement color change when checke with true for check color.
+//TODO stop violating dry and clean up build
 }
 
 class CharacterScreenStatefulWidget extends StatefulWidget {
