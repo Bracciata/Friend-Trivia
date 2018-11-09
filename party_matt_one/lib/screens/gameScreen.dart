@@ -118,6 +118,8 @@ class GameScreen extends State<GameScreenStatefulWidget> {
   }
 
   void beginNextQuestion() {
+    //TODO implement out of questions or done with game
+    playersAnswered=0;
     questionIndex += 1;
     for (var pointsByRound in playerPointsThisRound) {
       pointsByRound = 0;

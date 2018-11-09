@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'gameScreen.dart';
+import 'package:flutter/services.dart';
 
 class Countdown extends AnimatedWidget {
   Countdown({Key key, this.animation}) : super(key: key, listenable: animation);
@@ -11,13 +12,14 @@ class Countdown extends AnimatedWidget {
         style: new TextStyle(fontSize: 150.0));
   }
 }
-class NameTextField extends Container{
-@override
-Widget build(BuildContext context){
-  return new Container();
+
+class NameTextField extends Container {
+  @override
+  Widget build(BuildContext context) {
+    return new Container();
+  }
 }
 
-}
 class CharacterScreen extends State<CharacterScreenStatefulWidget>
     with TickerProviderStateMixin {
   final List<int> playerNameAllowed = new List();
@@ -59,7 +61,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
         playerNames.add(new TextEditingController());
         textLength.add(0);
         playerNameAllowed.add(0);
-        _checkIfThisNameAllowed(playerNames.length-1, false);
+        _checkIfThisNameAllowed(playerNames.length - 1, false);
       });
     } else {
       //todo implement warn user that max players is nine
@@ -75,7 +77,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   }
 
   void _startCountdown() {
+    //hide the keyboard
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     setState(() {
+      //Open the animation
       visible = true;
       aniController.forward(from: 0.0);
     });
@@ -199,11 +204,11 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                           dismissIndex - 1,
                                           new TextEditingController(
                                               text: lastDeletedValue));
+                                      textLength.insert(dismissIndex - 1,
+                                          lastDeletedValue.length);
+                                      playerNameAllowed.insert(
+                                          dismissIndex - 1, lastDeletedAllowed);
                                     });
-                                    textLength.insert(dismissIndex - 1,
-                                        lastDeletedValue.length);
-                                    playerNameAllowed.insert(
-                                        dismissIndex - 1, lastDeletedAllowed);
                                   },
                                 )));
                           },
