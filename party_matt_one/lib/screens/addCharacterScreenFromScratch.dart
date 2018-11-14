@@ -39,7 +39,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     super.initState();
     playerNames.add(new TextEditingController());
     playerNames.add(new TextEditingController());
-     playerNames.add(new TextEditingController());
+    playerNames.add(new TextEditingController());
     textLength.add(0);
     textLength.add(0);
     textLength.add(0);
@@ -47,7 +47,6 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     playerNameAllowed.add(0);
     playerNameAllowed.add(0);
     playerNameAllowed.add(0);
-
 
     aniController = new AnimationController(
         vsync: this, duration: new Duration(seconds: startValue));

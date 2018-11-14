@@ -48,10 +48,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   void beginGame() {
     setState(() {
-
       Navigator.pushNamed(context, '/screens/addCharacterScreenFromScratch');
     });
   }
@@ -89,10 +87,11 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text(
-              "Pick, Pick, Pass"
-            ),
-            new RaisedButton(onPressed: beginGame,child: new Text("Begin"),)
+            new Text("Pick, Pick, Pass"),
+            new RaisedButton(
+              onPressed: beginGame,
+              child: new Text("Begin"),
+            )
           ],
         ),
       ),

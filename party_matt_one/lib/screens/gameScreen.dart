@@ -28,7 +28,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
       playerPointsTotal.add(0);
     }
     playerNamesRandomOrder.shuffle();
-    nameCardTS= new TextStyle(color: Colors.white,fontSize: 30.0);
+    nameCardTS = new TextStyle(color: Colors.white, fontSize: 30.0);
     super.initState();
   }
 
@@ -78,7 +78,9 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                                             index % Colors.primaries.length],
                                         child: Center(
                                             child: new Text(
-                                                playerNamesRandomOrder[index],style: nameCardTS,)),
+                                          playerNamesRandomOrder[index],
+                                          style: nameCardTS,
+                                        )),
                                       ))
                                   : new GestureDetector(
                                       key: Key(index.toString()),
@@ -90,8 +92,9 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                                             index % Colors.primaries.length],
                                         child: Center(
                                             child: new Text(
-                                                playerNamesRandomOrder[
-                                                    index + 1],style: nameCardTS,)),
+                                          playerNamesRandomOrder[index + 1],
+                                          style: nameCardTS,
+                                        )),
                                       ));
                             })),
                       )
@@ -161,8 +164,8 @@ class GameScreen extends State<GameScreenStatefulWidget> {
     //TODO implement out of questions or done with game
     playersAnswered = 0;
     questionIndex += 1;
-    for (var pointsByRound in playerPointsThisRound) {
-      pointsByRound = 0;
+    for (int i = 0; i < playerPointsThisRound.length; ++i) {
+      playerPointsThisRound[i] = 0;
     }
     setState(() {
       screenShowing = 0;
