@@ -39,11 +39,15 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
     super.initState();
     playerNames.add(new TextEditingController());
     playerNames.add(new TextEditingController());
+     playerNames.add(new TextEditingController());
+    textLength.add(0);
     textLength.add(0);
     textLength.add(0);
     //0 means untouched, 1 allowed, 2 not allowed
     playerNameAllowed.add(0);
     playerNameAllowed.add(0);
+    playerNameAllowed.add(0);
+
 
     aniController = new AnimationController(
         vsync: this, duration: new Duration(seconds: startValue));
@@ -181,7 +185,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                     final item = index.toString();
                     focusNodes.add(new FocusNode());
                     focusNodes[index].addListener(() => _focusChanged(index));
-                    if (index > 1) {
+                    if (index > 2) {
                       return Dismissible(
                           // Each Dismissible must contain a Key. Keys allow Flutter to
                           // uniquely identify Widgets.
