@@ -109,7 +109,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
   }
 
   void _checkIfAllPlayersAllowed() {
-    if (playerNameAllowed.contains(0) || playerNameAllowed.contains(2)) {
+    if (playerNameAllowed.any((int item) => item != 1)) {
       setState(() {
         allPlayersAllowed = false;
       });
@@ -122,16 +122,27 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
 
   void _checkIfThisNameAllowed(int index, bool colorCheck) {
     setState(() {
+      List<String> l = namesAsStringList(playerNames);
+      l.removeAt(index);
       playerNameAllowed[index] = 2;
       if (playerNames[index].text.length > 0) {
-        List<String> l = namesAsStringList(playerNames);
-        l.removeAt(index);
         if (!l.contains(playerNames[index].text)) {
           playerNameAllowed[index] = 1;
         }
       }
       _checkIfAllPlayersAllowed();
-      if (colorCheck) {}
+      if (colorCheck) {
+        if (playerNameAllowed[index] != 1) {
+          setState(() {
+            if (l.contains(playerNames[index].text)) {
+              playerNameAllowed[index] = 3;
+            }
+            if (!(playerNames[index].text.length > 0)) {
+              playerNameAllowed[index] = 4;
+            }
+          });
+        }
+      }
     });
   }
 
@@ -232,6 +243,13 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                         _checkIfThisNameAllowed(index, true);
                                       },
                                       decoration: new InputDecoration(
+                                          //check when others change if where duplicate name in case some other name the first changes then this one will not
+                                          errorText: playerNameAllowed[index] ==
+                                                  3
+                                              ? ("You can't copy another players name!")
+                                              : playerNameAllowed[index] == 4
+                                                  ? ("Your name can't be blank!")
+                                                  : null,
                                           filled: true,
                                           fillColor: Colors.white,
                                           counterText: (18 - textLength[index])

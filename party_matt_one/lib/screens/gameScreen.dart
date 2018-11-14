@@ -176,7 +176,6 @@ class GameScreen extends State<GameScreenStatefulWidget> {
   }
   //pass to play feature is randomize where name is in list so you can't guess what others have chosen
   //TODO exclude yourself from the list
-  //TODO fix opening next question
 }
 
 class GameScreenStatefulWidget extends StatefulWidget {
