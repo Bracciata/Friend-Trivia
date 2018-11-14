@@ -235,7 +235,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                               child: ListTile(
                                   title: TextField(
                                       controller: playerNames[index],
-                                      maxLength: 19,
+                                      maxLength: 12,
                                       onChanged: (text) {
                                         setState(() {
                                           textLength[index] = text.length;
@@ -256,10 +256,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                                   : null,
                                           filled: true,
                                           fillColor: Colors.white,
-                                          counterText: (18 - textLength[index])
+                                          counterText: (11 - textLength[index])
                                               .toString(),
                                           //TODO decide between allowing the user to go as long as they want and just tell them they are wrong or using max length.
-                                          counterStyle: (18 -
+                                          counterStyle: (11 -
                                                       textLength[index] <
                                                   0)
                                               ? new TextStyle(color: Colors.red)
@@ -271,7 +271,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                           child: ListTile(
                               title: TextField(
                                   controller: playerNames[index],
-                                  maxLength: 18,
+                                  maxLength: 11,
                                   onChanged: (text) {
                                     setState(() {
                                       textLength[index] = text.length;
@@ -287,7 +287,7 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                                     fillColor:
                                         Color.fromARGB(255, 221, 221, 221),
                                     counterText:
-                                        (18 - textLength[index]).toString(),
+                                        (11 - textLength[index]).toString(),
                                   ))));
                     }
                   }),

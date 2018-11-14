@@ -16,6 +16,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
   int playersAnswered = 0;
   int remainingHeight = 0;
   int maxSingleColumnPlayers = 3;
+  TextStyle nameCardTS = new TextStyle();
   @override
   void initState() {
     questions.shuffle();
@@ -27,6 +28,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
       playerPointsTotal.add(0);
     }
     playerNamesRandomOrder.shuffle();
+    nameCardTS= new TextStyle(color: Colors.white,fontSize: 30.0);
     super.initState();
   }
 
@@ -76,7 +78,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                                             index % Colors.primaries.length],
                                         child: Center(
                                             child: new Text(
-                                                playerNamesRandomOrder[index])),
+                                                playerNamesRandomOrder[index],style: nameCardTS,)),
                                       ))
                                   : new GestureDetector(
                                       key: Key(index.toString()),
@@ -89,7 +91,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                                         child: Center(
                                             child: new Text(
                                                 playerNamesRandomOrder[
-                                                    index + 1])),
+                                                    index + 1],style: nameCardTS,)),
                                       ));
                             })),
                       )
