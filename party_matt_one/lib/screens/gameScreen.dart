@@ -36,11 +36,11 @@ class GameScreen extends State<GameScreenStatefulWidget> {
     //removes tool bar, removes notification bar with 24, removes textfield
     double itemHeight =
         (size.height - kToolbarHeight - 24) - (size.height / 10);
-    names.length > maxSingleColumnPlayers
-        ? itemHeight = itemHeight / ((names.length / 2).ceil())
-        : itemHeight = itemHeight / names.length;
+    names.length - 1 > maxSingleColumnPlayers
+        ? itemHeight = itemHeight / (((names.length - 1) / 2).ceil())
+        : itemHeight = itemHeight / (names.length - 1);
     double itemWidth = (size.width);
-    names.length > maxSingleColumnPlayers
+    names.length - 1 > maxSingleColumnPlayers
         ? itemWidth = itemWidth / 2
         : itemWidth = itemWidth;
     return new Scaffold(
@@ -59,20 +59,38 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                         child: new GridView.count(
                             childAspectRatio: (itemWidth / itemHeight),
                             crossAxisCount:
-                                names.length > maxSingleColumnPlayers ? 2 : 1,
-                            children: List.generate(names.length, (index) {
-                              return new GestureDetector(
-                                  key: Key(index.toString()),
-                                  onTap: () {
-                                    nameChosen(index);
-                                  },
-                                  child: new Card(
-                                    color: Colors.primaries[
-                                        index % Colors.primaries.length],
-                                    child: Center(
-                                        child: new Text(
-                                            playerNamesRandomOrder[index])),
-                                  ));
+                                names.length - 1 > maxSingleColumnPlayers
+                                    ? 2
+                                    : 1,
+                            children: List.generate(names.length - 1, (index) {
+                              return !playerNamesRandomOrder
+                                      .getRange(0, index + 1)
+                                      .contains(names[playersAnswered])
+                                  ? new GestureDetector(
+                                      key: Key(index.toString()),
+                                      onTap: () {
+                                        nameChosen(index);
+                                      },
+                                      child: new Card(
+                                        color: Colors.primaries[
+                                            index % Colors.primaries.length],
+                                        child: Center(
+                                            child: new Text(
+                                                playerNamesRandomOrder[index])),
+                                      ))
+                                  : new GestureDetector(
+                                      key: Key(index.toString()),
+                                      onTap: () {
+                                        nameChosen(index + 1);
+                                      },
+                                      child: new Card(
+                                        color: Colors.primaries[
+                                            index % Colors.primaries.length],
+                                        child: Center(
+                                            child: new Text(
+                                                playerNamesRandomOrder[
+                                                    index + 1])),
+                                      ));
                             })),
                       )
                     ],
