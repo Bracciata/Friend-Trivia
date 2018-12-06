@@ -1,31 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:party_matt_one/strings/questions.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
+class Player{
+  String name;
+  int pointsThisRound;
+  int pointsTotal;
+  Player(String name){
+      this.name=name;
+      pointsThisRound=0;
+      pointsTotal=0;
+  }
+  void choosen(){
+    pointsThisRound+=1;
+    pointsTotal+=1;
+  }
+  void endOfRound(){
+    pointsThisRound=0;
+  }
+}
 
 //TODO is begin game using players names
 //TODO create the questions
+
+
 class GameScreen extends State<GameScreenStatefulWidget> {
-  List names;
   GameScreen({this.names});
+  List names;
   List questions = QuestionStrings.pollsQuestions;
   List playerNamesRandomOrder = new List();
   int questionIndex = 0;
-  List playerPointsThisRound;
-  List playerPointsTotal;
+
   //0 is pass to player, 1 is select, 2 is question over graph
   int screenShowing = 0;
   int playersAnswered = 0;
   int remainingHeight = 0;
   int maxSingleColumnPlayers = 3;
+  List players;
   TextStyle nameCardTS = new TextStyle();
   @override
   void initState() {
     questions.shuffle();
-    playerPointsThisRound = new List();
-    playerPointsTotal = new List();
+    players=new List();
     for (var playerName in names) {
+      players.add(new Player(playerName));
       playerNamesRandomOrder.add(playerName);
-      playerPointsThisRound.add(0);
-      playerPointsTotal.add(0);
     }
     playerNamesRandomOrder.shuffle();
     nameCardTS = new TextStyle(color: Colors.white, fontSize: 30.0);
@@ -140,7 +159,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                                   onPressed: () {
                                     beginNextQuestion();
                                   },
-                                )
+                                ),
                               ]),
                           color: Colors.white,
                         ),
@@ -164,8 +183,8 @@ class GameScreen extends State<GameScreenStatefulWidget> {
     //TODO implement out of questions or done with game
     playersAnswered = 0;
     questionIndex += 1;
-    for (int i = 0; i < playerPointsThisRound.length; ++i) {
-      playerPointsThisRound[i] = 0;
+    for (int i = 0; i < players.length; ++i) {
+      players.elementAt(i).endOfRound();
     }
     setState(() {
       screenShowing = 0;
@@ -181,8 +200,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
 
   void addPoints(int index) {
     int indexOfNames = names.indexOf(playerNamesRandomOrder[index]);
-    playerPointsTotal[indexOfNames] += 1;
-    playerPointsThisRound[indexOfNames] += 1;
+    players.elementAt(indexOfNames).choosen();
   }
 
   void passed() {
