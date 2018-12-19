@@ -17,6 +17,32 @@ class SimpleBarChart extends StatelessWidget {
   }
 }
 
+class BetweenStatePage extends StatelessWidget {
+  final Function pointGatheringFunction;
+  final Function whatNextFunction;
+  BetweenStatePage({this.pointGatheringFunction, this.whatNextFunction});
+
+  @override
+  Widget build(BuildContext context) {
+    return new GestureDetector(
+        child: new Container(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(child: SimpleBarChart(pointGatheringFunction())),
+                FlatButton(
+                  child: new Text("Done with question..."),
+                  onPressed: () {
+                    whatNextFunction();
+                  },
+                ),
+              ]),
+          color: Colors.white,
+        ),
+        onTap: whatNextFunction);
+  }
+}
 
 class Player {
   String name;
@@ -162,26 +188,15 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                         ),
                         onTap: passed,
                       )
-                    :
-                    //the page for showing who won the question
-                    GestureDetector(
-                        child: new Container(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                Expanded(
-                                    child: SimpleBarChart(getEndRoundPoints())),
-                                FlatButton(
-                                  child: new Text("Done with question..."),
-                                  onPressed: () {
-                                    beginNextQuestion();
-                                  },
-                                ),
-                              ]),
-                          color: Colors.white,
-                        ),
-                        onTap: beginNextQuestion)));
+                    : questionIndex + 1 < questions.length
+                        ?
+                        //the page for showing who won the question
+                        new BetweenStatePage(
+                            pointGatheringFunction: getEndRoundPoints,
+                            whatNextFunction: beginNextQuestion)
+                        : new BetweenStatePage(
+                            pointGatheringFunction: getEndRoundPoints,
+                            whatNextFunction: endGame)));
   }
 
   List<charts.Series<Player, String>> getEndRoundPoints() {
@@ -196,6 +211,22 @@ class GameScreen extends State<GameScreenStatefulWidget> {
     ];
   }
 
+  List<charts.Series<Player, String>> getEndGamePoints() {
+    return [
+      new charts.Series<Player, String>(
+        id: 'Points',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (Player player, _) => player.name,
+        measureFn: (Player player, _) => player.pointsTotal,
+        data: players,
+      )
+    ];
+  }
+
+  void endGame() {
+    //Move to same players / new players screen
+    //TODO implement end
+  }
   void nameChosen(int index) {
     //Either pass the phone to next person or pass to person of name
     addPoints(index);
@@ -211,23 +242,16 @@ class GameScreen extends State<GameScreenStatefulWidget> {
 
   void beginNextQuestion() {
     //TODO implement out of questions or done with game
-    if (questionIndex + 1 < questions.length) {
-      playersAnswered = 0;
-      questionIndex += 1;
-      for (int i = 0; i < players.length; ++i) {
-        players.elementAt(i).endOfRound();
-      }
-      setState(() {
-        screenShowing = 0;
-      });
-    } else {
-      endGame();
+    playersAnswered = 0;
+    questionIndex += 1;
+    for (int i = 0; i < players.length; ++i) {
+      players.elementAt(i).endOfRound();
     }
+    setState(() {
+      screenShowing = 0;
+    });
   }
 
-  void endGame() {
-
-  }
   void showWinner() {
     //todo create graph and have page where they can move on
     setState(() {
