@@ -71,12 +71,12 @@ class GameScreen extends State<GameScreenStatefulWidget> {
   List questions = QuestionStrings.pollsQuestions;
   List playerNamesRandomOrder = new List();
   int questionIndex = 0;
-
   //0 is pass to player, 1 is select, 2 is question over graph
   int screenShowing = 0;
   int playersAnswered = 0;
   int remainingHeight = 0;
   int maxSingleColumnPlayers = 3;
+  int designatedNumberOfQuestions=10;
   List players;
   TextStyle nameCardTS = new TextStyle();
   @override
@@ -187,7 +187,8 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                         ),
                         onTap: passed,
                       )
-                    : questionIndex + 1 < questions.length
+                      //below checking if questions length is not nessecary because from here on out length will be long enough you won't want to answer all
+                    : (questionIndex + 1 < questions.length)&&(questionIndex+1<designatedNumberOfQuestions)
                         ?
                         //the page for showing who won the question
                         new BetweenStatePage(
