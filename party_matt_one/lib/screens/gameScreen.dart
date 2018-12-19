@@ -2,27 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:party_matt_one/strings/questions.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class Player{
+class SimpleBarChart extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final bool animate;
+
+  SimpleBarChart(this.seriesList, {this.animate});
+
+  @override
+  Widget build(BuildContext context) {
+    return new charts.BarChart(
+      seriesList,
+      animate: animate,
+    );
+  }
+}
+
+
+class Player {
   String name;
   int pointsThisRound;
   int pointsTotal;
-  Player(String name){
-      this.name=name;
-      pointsThisRound=0;
-      pointsTotal=0;
+  Player(String name) {
+    this.name = name;
+    pointsThisRound = 0;
+    pointsTotal = 0;
   }
-  void choosen(){
-    pointsThisRound+=1;
-    pointsTotal+=1;
+  void choosen() {
+    pointsThisRound += 1;
+    pointsTotal += 1;
   }
-  void endOfRound(){
-    pointsThisRound=0;
+
+  void endOfRound() {
+    pointsThisRound = 0;
   }
 }
 
 //TODO is begin game using players names
 //TODO create the questions
-
 
 class GameScreen extends State<GameScreenStatefulWidget> {
   GameScreen({this.names});
@@ -41,7 +57,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
   @override
   void initState() {
     questions.shuffle();
-    players=new List();
+    players = new List<Player>();
     for (var playerName in names) {
       players.add(new Player(playerName));
       playerNamesRandomOrder.add(playerName);
@@ -154,6 +170,8 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
+                                Expanded(
+                                    child: SimpleBarChart(getEndRoundPoints())),
                                 FlatButton(
                                   child: new Text("Done with question..."),
                                   onPressed: () {
@@ -164,6 +182,18 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                           color: Colors.white,
                         ),
                         onTap: beginNextQuestion)));
+  }
+
+  List<charts.Series<Player, String>> getEndRoundPoints() {
+    return [
+      new charts.Series<Player, String>(
+        id: 'Points',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (Player player, _) => player.name,
+        measureFn: (Player player, _) => player.pointsThisRound,
+        data: players,
+      )
+    ];
   }
 
   void nameChosen(int index) {
@@ -181,16 +211,23 @@ class GameScreen extends State<GameScreenStatefulWidget> {
 
   void beginNextQuestion() {
     //TODO implement out of questions or done with game
-    playersAnswered = 0;
-    questionIndex += 1;
-    for (int i = 0; i < players.length; ++i) {
-      players.elementAt(i).endOfRound();
+    if (questionIndex + 1 < questions.length) {
+      playersAnswered = 0;
+      questionIndex += 1;
+      for (int i = 0; i < players.length; ++i) {
+        players.elementAt(i).endOfRound();
+      }
+      setState(() {
+        screenShowing = 0;
+      });
+    } else {
+      endGame();
     }
-    setState(() {
-      screenShowing = 0;
-    });
   }
 
+  void endGame() {
+
+  }
   void showWinner() {
     //todo create graph and have page where they can move on
     setState(() {

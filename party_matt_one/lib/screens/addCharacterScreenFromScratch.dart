@@ -342,9 +342,9 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
           child: new Icon(Icons.add)),
     );
   }
-//todo show which names are not allowed
+//TODO show which names are not allowed
 ////maybe make color red
-//todo share why names is not allowed
+//TODO share why names is not allowed
 ////If allow over max length then explain it is over max length
 ////Otherwise notify can't be blank
 ////Also make sure no others share name
