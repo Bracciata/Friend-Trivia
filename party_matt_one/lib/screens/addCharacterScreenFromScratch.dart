@@ -181,14 +181,13 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
               child: ListView.builder(
                   itemCount: playerNames.length,
                   itemBuilder: (context, index) {
-                    final item = index.toString();
                     focusNodes.add(new FocusNode());
                     focusNodes[index].addListener(() => _focusChanged(index));
                     if (index > 2) {
                       return Dismissible(
                           // Each Dismissible must contain a Key. Keys allow Flutter to
                           // uniquely identify Widgets.
-                          key: Key(item),
+                          key: Key(playerNames[index].hashCode.toString()),
                           // We also need to provide a function that tells our app
                           // what to do after an item has been swiped away.
                           onDismissed: (direction) {
@@ -198,11 +197,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
                             playerNames[index].text = "";
                             lastDeletedAllowed = playerNameAllowed[index];
                             setState(() {
-                              playerNames.removeAt(index);
+                              (playerNames).removeAt(index);
                               textLength.removeAt(index);
                               playerNameAllowed.removeAt(index);
                             });
-
                             // Then show a snackbar!
                             Scaffold.of(context).showSnackBar(SnackBar(
                                 content: new Text(lastDeletedValue != ""
@@ -348,10 +346,10 @@ class CharacterScreen extends State<CharacterScreenStatefulWidget>
 ////If allow over max length then explain it is over max length
 ////Otherwise notify can't be blank
 ////Also make sure no others share name
-//TODO still can't remove any element other than last in list, that is bad.
 //TODO if they press non ready begin button show them what is wrong
 //TODO implement color change when checke with true for check color.
 //TODO stop violating dry and clean up build
+//TODO fix cursor continue blinking if name blank and switched one being edited
 }
 
 class CharacterScreenStatefulWidget extends StatefulWidget {

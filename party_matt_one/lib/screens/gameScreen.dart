@@ -63,7 +63,6 @@ class Player {
   }
 }
 
-//TODO is begin game using players names
 //TODO create the questions
 
 class GameScreen extends State<GameScreenStatefulWidget> {
@@ -241,7 +240,6 @@ class GameScreen extends State<GameScreenStatefulWidget> {
   }
 
   void beginNextQuestion() {
-    //TODO implement out of questions or done with game
     playersAnswered = 0;
     questionIndex += 1;
     for (int i = 0; i < players.length; ++i) {
@@ -277,7 +275,6 @@ class GameScreen extends State<GameScreenStatefulWidget> {
     });
   }
   //pass to play feature is randomize where name is in list so you can't guess what others have chosen
-  //TODO exclude yourself from the list
 }
 
 class GameScreenStatefulWidget extends StatefulWidget {
