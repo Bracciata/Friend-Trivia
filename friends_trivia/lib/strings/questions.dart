@@ -20,6 +20,5 @@ class QuestionStrings {
     "Temporary Question Placeholder",
     "Temporary Question Placeholder",
     "Temporary Question Placeholder",
-
   ];
 }

@@ -3,6 +3,7 @@ import 'package:party_matt_one/strings/questions.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:party_matt_one/classes/player.dart';
 import 'postGameScreen.dart';
+
 class SimpleBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
@@ -45,7 +46,6 @@ class BetweenStatePage extends StatelessWidget {
   }
 }
 
-
 //TODO create the questions
 
 class GameScreen extends State<GameScreenStatefulWidget> {
@@ -59,7 +59,7 @@ class GameScreen extends State<GameScreenStatefulWidget> {
   int playersAnswered = 0;
   int remainingHeight = 0;
   int maxSingleColumnPlayers = 3;
-  int designatedNumberOfQuestions=10;
+  int designatedNumberOfQuestions = 10;
   List players;
   TextStyle nameCardTS = new TextStyle();
   @override
@@ -170,8 +170,9 @@ class GameScreen extends State<GameScreenStatefulWidget> {
                         ),
                         onTap: passed,
                       )
-                      //below checking if questions length is not nessecary because from here on out length will be long enough you won't want to answer all
-                    : (questionIndex + 1 < questions.length)&&(questionIndex+1<designatedNumberOfQuestions)
+                    //below checking if questions length is not nessecary because from here on out length will be long enough you won't want to answer all
+                    : (questionIndex + 1 < questions.length) &&
+                            (questionIndex + 1 < designatedNumberOfQuestions)
                         ?
                         //the page for showing who won the question
                         new BetweenStatePage(
@@ -212,12 +213,13 @@ class GameScreen extends State<GameScreenStatefulWidget> {
         context,
         new MaterialPageRoute(
             builder: (BuildContext context) =>
-                new PostGameScreenScreenStatefulWidget(players: players,)),
-        (Route<dynamic> route) {
+                new PostGameScreenScreenStatefulWidget(
+                  players: players,
+                )), (Route<dynamic> route) {
       return false;
     });
-
   }
+
   void nameChosen(int index) {
     //Either pass the phone to next person or pass to person of name
     addPoints(index);
