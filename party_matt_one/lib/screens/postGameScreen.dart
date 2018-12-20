@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'gameScreen.dart';
 import 'addCharacterScreenFromScratch.dart';
 
-//TODO add buttons to make decision
 class PostGameScreen extends State<PostGameScreenScreenStatefulWidget> {
   PostGameScreen({this.players});
   List players;
   @override
   Widget build(BuildContext context) {
-    return new Container();
+    return new Container(
+        child: Column(
+      children: <Widget>[
+        new Text("Play again with"),
+        new RaisedButton(
+            child: new Text("Same Names"), onPressed: openGameSameNames),
+        new RaisedButton(
+            child: new Text("New Names"), onPressed: openNameSeletion),
+      ],
+    ));
   }
 
   void openGameSameNames() {
@@ -27,12 +35,11 @@ class PostGameScreen extends State<PostGameScreenScreenStatefulWidget> {
   }
 
   void openNameSeletion() {
-     Navigator.pushAndRemoveUntil(
+    Navigator.pushAndRemoveUntil(
         context,
         new MaterialPageRoute(
             builder: (BuildContext context) =>
-                new CharacterScreenStatefulWidget()),
-        (Route<dynamic> route) {
+                new CharacterScreenStatefulWidget()), (Route<dynamic> route) {
       return false;
     });
   }
