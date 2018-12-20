@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:party_matt_one/strings/questions.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-
+import 'package:party_matt_one/classes/player.dart';
+import 'postGameScreen.dart';
 class SimpleBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
@@ -44,24 +45,6 @@ class BetweenStatePage extends StatelessWidget {
   }
 }
 
-class Player {
-  String name;
-  int pointsThisRound;
-  int pointsTotal;
-  Player(String name) {
-    this.name = name;
-    pointsThisRound = 0;
-    pointsTotal = 0;
-  }
-  void choosen() {
-    pointsThisRound += 1;
-    pointsTotal += 1;
-  }
-
-  void endOfRound() {
-    pointsThisRound = 0;
-  }
-}
 
 //TODO create the questions
 
@@ -225,7 +208,15 @@ class GameScreen extends State<GameScreenStatefulWidget> {
 
   void endGame() {
     //Move to same players / new players screen
-    //TODO implement end
+    Navigator.pushAndRemoveUntil(
+        context,
+        new MaterialPageRoute(
+            builder: (BuildContext context) =>
+                new PostGameScreenScreenStatefulWidget(players: players,)),
+        (Route<dynamic> route) {
+      return false;
+    });
+
   }
   void nameChosen(int index) {
     //Either pass the phone to next person or pass to person of name
